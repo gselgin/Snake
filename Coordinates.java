@@ -21,8 +21,8 @@ public class Coordinates {
 
     public static boolean compareCoordsApple(Coordinates head) {
         appleCoords = GameEngine.getAppleCoordinates();
-        if (head.getX() < appleCoords.getX() + 15 && head.getX() > appleCoords.getX() - 15) {
-            if (head.getY() < appleCoords.getY() + 15 && head.getY() > appleCoords.getY() - 15) {
+        if (head.getX() == appleCoords.getX()) {
+            if (head.getY() == appleCoords.getY()) {
                 return true;
             }
             else {

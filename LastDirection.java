@@ -2,6 +2,7 @@ public enum LastDirection {
     LEFT,
     RIGHT,
     UP,
-    DOWN
+    DOWN,
+    NO_ACTION
 
 }

@@ -69,19 +69,40 @@ public class UIManager extends JPanel {
     //TODO: fix static accessed via instance reference
 
     // Draws the game
+
+    //TODO: Grid, Board Size 15X15 grid squares, each grid square is 30X30 pixels big, so board is 450X450 pixels
     private void drawGame(Graphics2D g2) {
+
+        // Draws checkerboard pattern
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if ((i + j) % 2 == 0) {
+                    g2.setColor(Color.GRAY);
+                    g2.fillRect(i*30, j*30, 30, 30);
+                }
+                else {
+                    g2.setColor(Color.LIGHT_GRAY);
+                    g2.fillRect(i*30, j*30, 30, 30);
+
+                }
+            }
+
+        }
+
         // Get apple coordinates and draw into game
         Coordinates appleCoordinates = engine.getAppleCoordinates();
         float appleX = appleCoordinates.getX();
         float appleY = appleCoordinates.getY();
-        g2.drawImage(appleImage, Math.round(appleX), Math.round(appleY), 20, 20, null);
+        // Gets grid coordinate and multiplies by 30 to get the pixel number. Adding 4 places the apple
+        // in the center of the grip square
+        g2.drawImage(appleImage, (Math.round(appleX)*30) + 4, (Math.round(appleY)*30) + 4, 22, 22, null);
 
         // Draw snake head into game
         LinkedList<Coordinates> snakeList = engine.getSnakeList();
         Coordinates snakeHead = snakeList.getLast();
         x = snakeHead.getX();
         y = snakeHead.getY();
-        g2.drawImage(headImage, Math.round(x), Math.round(y), 20, 20, null);
+        g2.drawImage(headImage, (Math.round(x*30)) + 3, (Math.round(y*30)) + 3, 23, 23, null);
 
         // Draw each snake body piece into game
 
@@ -89,27 +110,27 @@ public class UIManager extends JPanel {
             Coordinates snakePart = snakeList.get(i);
             x = snakePart.getX();
             y = snakePart.getY();
-            g2.drawImage(bodyImage, Math.round(x), Math.round(y), 20, 20, null);
+            g2.drawImage(bodyImage, (Math.round(x*30)) + 3, (Math.round(y*30)) + 3, 23, 23, null);
 
         }
 
         // If the game is over draw game over graphic
         if (GameEngine.status == GameStatus.GAME_OVER) {
-            g2.drawImage(gameOverImage, 100, 60, 500, 500,null);
+            g2.drawImage(gameOverImage, 90, 70, 250, 250,null);
             g2.setFont(restartFont.deriveFont(30f));
-            g2.setColor(Color.WHITE);
+            g2.setColor(Color.BLACK);
             String restartStr = "Press ENTER To Restart";
-            g2.drawString(restartStr, 250, 630);
+            g2.drawString(restartStr, 100, 350);
         }
 
         g2.setColor(Color.WHITE);
-        g2.fillRect(0,0,708,50);
+        g2.fillRect(0,0,708,60);
 
-        g2.drawImage(appleImage, 200,10, 30, 30 ,null);
+        g2.drawImage(appleImage, 180,10, 35, 35 ,null);
         g2.setColor(Color.BLACK);
         g2.setFont(restartFont.deriveFont(30f));
         score = engine.getScoreString();
-        g2.drawString(score, 240, 35);
+        g2.drawString(score, 220, 40);
 
 
     }

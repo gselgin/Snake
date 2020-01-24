@@ -5,7 +5,6 @@
 // Source: https://github.com/ahmetcandiroglu/Super-Mario-Bros
 
 // Imports JFrame
-import com.sun.org.apache.bcel.internal.generic.LASTORE;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,10 +24,13 @@ public class GameEngine implements Runnable {
     private ImageLoader imageLoader;
     private UIManager uiManager;
     private LastDirection last;
+    private boolean turning;
+    private  ButtonAction action;
 
-    public static final int WIDTH = 708, HEIGHT = 708;
+    // height is more because the top toolbar adds to the pixels needed
+    public static final int WIDTH = 450, HEIGHT = 470;
 
-    private Coordinates snakePosition = new Coordinates(20,200);
+    private Coordinates snakePosition = new Coordinates(2,6);
     public Snake snake;
     public static Apple apple;
 
@@ -74,6 +76,7 @@ public class GameEngine implements Runnable {
             return;
 
         status = GameStatus.RUNNING;
+        last = LastDirection.NO_ACTION;
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -82,13 +85,17 @@ public class GameEngine implements Runnable {
     public void run() {
         while (status == GameStatus.RUNNING) {
             long startFrameTime = System.currentTimeMillis();
+
+            if (turning) {
+                receiveInput(action);
+            }
             // Render and update the frame
             update();
             render();
             // Delay by 1 millisecond so that timeThisFrame is always > 0
             try
             {
-                TimeUnit.MILLISECONDS.sleep(75);
+                TimeUnit.MILLISECONDS.sleep(70);
             }
             catch(InterruptedException ex)
             {
@@ -107,8 +114,10 @@ public class GameEngine implements Runnable {
 
     // Updates everything that needs to change from the last frame
     public void update() {
-
         if (moveRight) {
+            LinkedList<Coordinates> snakeL = getSnakeList();
+            Coordinates head = snakeL.getLast();
+            Coordinates lasth = snakeL.get(snakeL.size()-2);
             Snake.move(ButtonAction.Right);
             last = LastDirection.RIGHT;
 
@@ -131,30 +140,37 @@ public class GameEngine implements Runnable {
 
     }
 
-    public void receiveInput(ButtonAction action) {
-        if (action == ButtonAction.Right && last != LastDirection.LEFT) {
-            moveLeft = false;
-            moveUp = false;
-            moveDown = false;
-            moveRight = true;
+    public void receiveInput(ButtonAction a) {
+        action = a;
+        if (snake.getSnakeL().getLast().getX() % 1 == 0 && snake.getSnakeL().getLast().getY() % 1 == 0) {
+            turning = false;
+            if (action == ButtonAction.Up && last != LastDirection.DOWN) {
+                moveRight = false;
+                moveLeft = false;
+                moveDown = false;
+                moveUp = true;
+            }
+            if (action == ButtonAction.Down && last != LastDirection.UP) {
+                moveRight = false;
+                moveLeft = false;
+                moveUp = false;
+                moveDown = true;
+            }
+            if (action == ButtonAction.Right && last != LastDirection.LEFT) {
+                moveLeft = false;
+                moveUp = false;
+                moveDown = false;
+                moveRight = true;
+            }
+            if (action == ButtonAction.Left && last != LastDirection.RIGHT) {
+                moveRight = false;
+                moveUp = false;
+                moveDown = false;
+                moveLeft = true;
+            }
         }
-        if (action == ButtonAction.Left && last != LastDirection.RIGHT) {
-            moveRight = false;
-            moveUp = false;
-            moveDown = false;
-            moveLeft = true;
-        }
-        if (action == ButtonAction.Up && last != LastDirection.DOWN) {
-            moveRight = false;
-            moveLeft = false;
-            moveDown = false;
-            moveUp = true;
-        }
-        if (action == ButtonAction.Down && last != LastDirection.UP) {
-            moveRight = false;
-            moveLeft = false;
-            moveUp = false;
-            moveDown = true;
+        else {
+            turning = true;
         }
         if (action == ButtonAction.ENTER) {
             reset();
@@ -198,6 +214,13 @@ public class GameEngine implements Runnable {
 
     public GameStatus getStatus() {
         return status;
+    }
+
+    public int getWidth() {
+        return WIDTH;
+    }
+    public int getHeight() {
+        return HEIGHT;
     }
 
     public String getScoreString() {

@@ -9,9 +9,9 @@ public class Apple {
 
 
     public Apple() {
-        x = rand.nextInt(660);
-        y = rand.nextInt(590);
-        appleCoords = new Coordinates(x + 10, y + 60);
+        x = rand.nextInt(14);
+        y = rand.nextInt(12) + 2;
+        appleCoords = new Coordinates(x, y);
     }
 
     public Coordinates getAppleCoords() {

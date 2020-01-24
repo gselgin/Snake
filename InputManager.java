@@ -23,20 +23,20 @@ public class InputManager implements KeyListener {
     public void keyPressed(KeyEvent event) {
         status = engine.getStatus();
         int keyCode = event.getKeyCode();
-        ButtonAction action = ButtonAction.No_Action;
+        ButtonAction action = ButtonAction.NO_ACTION;
 
         if (status == GameStatus.RUNNING) {
             if (keyCode == KeyEvent.VK_RIGHT) {
-                action = ButtonAction.Right;
+                action = ButtonAction.RIGHT;
             }
             else if (keyCode == KeyEvent.VK_LEFT) {
-                action = ButtonAction.Left;
+                action = ButtonAction.LEFT;
             }
             else if (keyCode == KeyEvent.VK_UP) {
-                action = ButtonAction.Up;
+                action = ButtonAction.UP;
             }
             else if (keyCode == KeyEvent.VK_DOWN) {
-                action = ButtonAction.Down;
+                action = ButtonAction.DOWN;
             }
         }
         else if (status == GameStatus.GAME_OVER) {

@@ -5,9 +5,10 @@
 // Source: https://github.com/ahmetcandiroglu/Super-Mario-Bros
 
 // Imports JFrame
-
+//TODO: Organized: ButtonAction,
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
@@ -23,9 +24,10 @@ public class GameEngine implements Runnable {
     private Thread gameThread;
     private ImageLoader imageLoader;
     private UIManager uiManager;
-    private LastDirection last;
+    private ButtonAction last;
     private boolean turning;
     private  ButtonAction action;
+    private Queue <ButtonAction> directions = new LinkedList<>();
 
     // height is more because the top toolbar adds to the pixels needed
     public static final int WIDTH = 450, HEIGHT = 470;
@@ -63,7 +65,6 @@ public class GameEngine implements Runnable {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-
         // Begin infinite loop that starts game
         start();
     }
@@ -76,7 +77,7 @@ public class GameEngine implements Runnable {
             return;
 
         status = GameStatus.RUNNING;
-        last = LastDirection.NO_ACTION;
+        last = ButtonAction.NO_ACTION;
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -115,54 +116,46 @@ public class GameEngine implements Runnable {
     // Updates everything that needs to change from the last frame
     public void update() {
         if (moveRight) {
-            LinkedList<Coordinates> snakeL = getSnakeList();
-            Coordinates head = snakeL.getLast();
-            Coordinates lasth = snakeL.get(snakeL.size()-2);
-            Snake.move(ButtonAction.Right);
-            last = LastDirection.RIGHT;
-
+            Snake.move(ButtonAction.RIGHT);
+            last = ButtonAction.RIGHT;
         }
         else if (moveLeft) {
-            Snake.move(ButtonAction.Left);
-            last = LastDirection.LEFT;
-
+            Snake.move(ButtonAction.LEFT);
+            last = ButtonAction.LEFT;
         }
         else if (moveUp) {
-            Snake.move(ButtonAction.Up);
-            last = LastDirection.UP;
-
+            Snake.move(ButtonAction.UP);
+            last = ButtonAction.UP;
         }
         else if (moveDown) {
-            Snake.move(ButtonAction.Down);
-            last = LastDirection.DOWN;
-
+            Snake.move(ButtonAction.DOWN);
+            last = ButtonAction.DOWN;
         }
-
     }
 
     public void receiveInput(ButtonAction a) {
         action = a;
         if (snake.getSnakeL().getLast().getX() % 1 == 0 && snake.getSnakeL().getLast().getY() % 1 == 0) {
             turning = false;
-            if (action == ButtonAction.Up && last != LastDirection.DOWN) {
+            if (action == ButtonAction.UP && last != ButtonAction.DOWN) {
                 moveRight = false;
                 moveLeft = false;
                 moveDown = false;
                 moveUp = true;
             }
-            if (action == ButtonAction.Down && last != LastDirection.UP) {
+            if (action == ButtonAction.DOWN && last != ButtonAction.UP) {
                 moveRight = false;
                 moveLeft = false;
                 moveUp = false;
                 moveDown = true;
             }
-            if (action == ButtonAction.Right && last != LastDirection.LEFT) {
+            if (action == ButtonAction.RIGHT && last != ButtonAction.LEFT) {
                 moveLeft = false;
                 moveUp = false;
                 moveDown = false;
                 moveRight = true;
             }
-            if (action == ButtonAction.Left && last != LastDirection.RIGHT) {
+            if (action == ButtonAction.LEFT && last != ButtonAction.RIGHT) {
                 moveRight = false;
                 moveUp = false;
                 moveDown = false;
@@ -226,6 +219,7 @@ public class GameEngine implements Runnable {
     public String getScoreString() {
         return Integer.toString(snake.getScore());
     }
+
 
     // Main call
     public static void main(String[] args) {

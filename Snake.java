@@ -1,18 +1,14 @@
 // Greg Elgin
-// Last updated: 12/30/19
-// Snake used in GameEngine snake game
+// Last updated: 1/23/20
+// Snake used in GameEngine Snake Game
 
 
-// Imports
 import java.util.LinkedList;
 
-// Snake class
 public class Snake {
 
-    // Define initial size of snake and its speed
     private final int INITIAL_SIZE = 3;
     private static final float SNAKE_SPEED = (float).5;
-
 
     //TODO: static
     private static ButtonAction direction;
@@ -30,7 +26,7 @@ public class Snake {
         // Create linked list
         snakeList = new LinkedList<>();
 
-        // Create head
+        // Create snake head
         head = initialCoords;
         snakeList.add(head);
 
@@ -44,23 +40,16 @@ public class Snake {
         }
 
         // Set Direction, initially not moving
-        direction = ButtonAction.No_Action;
+        direction = ButtonAction.NO_ACTION;
 
-        for (int i = 0; i < (snakeList.size()); i++) {
-            Coordinates body = snakeList.get(i);
-            System.out.print("(" + body.getX() + "," + body.getY() + "), ");
-        }
-        System.out.println();
-
-
-
-
+        // initialize score
         score = 0;
     }
 
 
     // Add a part to the end of the snake object
     public static void grow() {
+        // Execute twice
         for (int i = 0; i < 2; i++) {
             // Get the tail coordinates of the snake
             Coordinates tail = snakeList.getFirst();
@@ -69,16 +58,16 @@ public class Snake {
 
             // Change coordinate of new tail based on
             // direction of travel
-            if (direction == ButtonAction.Right ) {
+            if (direction == ButtonAction.RIGHT) {
                 x -= .5;
             }
-            else if (direction == ButtonAction.Left) {
+            else if (direction == ButtonAction.LEFT) {
                 x += .5;
             }
-            else if (direction == ButtonAction.Up) {
+            else if (direction == ButtonAction.UP) {
                 y += .5;
             }
-            else if (direction == ButtonAction.Down) {
+            else if (direction == ButtonAction.DOWN) {
                 y -= .5;
             }
 
@@ -101,19 +90,19 @@ public class Snake {
 
         // Create coordinates for the new head of the snake
         // based on the direction specified
-        if (direction == ButtonAction.Right ) {
+        if (direction == ButtonAction.RIGHT) {
             newY = head.getY();
             newX = SNAKE_SPEED + head.getX();
         }
-        else if (direction == ButtonAction.Left) {
+        else if (direction == ButtonAction.LEFT) {
             newY = head.getY();
             newX = + head.getX() - SNAKE_SPEED;
         }
-        else if (direction == ButtonAction.Up) {
+        else if (direction == ButtonAction.UP) {
             newY = head.getY() - SNAKE_SPEED;
             newX = + head.getX();
         }
-        else if (direction == ButtonAction.Down) {
+        else if (direction == ButtonAction.DOWN) {
             newY = head.getY() + SNAKE_SPEED;
             newX = + head.getX();
         }
@@ -133,13 +122,6 @@ public class Snake {
         // Remove the old head from the snake object
         snakeList.remove(snakeList.size()-2);
         checkCollisions();
-
-        for (int i = 0; i < (snakeList.size()); i++) {
-            Coordinates body = snakeList.get(i);
-            System.out.print("(" + body.getX() + "," + body.getY() + "), ");
-        }
-        System.out.println();
-
     }
 
 
@@ -158,7 +140,6 @@ public class Snake {
             score += 1;
         }
 
-        System.out.println(head.getX());
         if (head.getX() < 0 || head.getX() > 14) {
             GameEngine.status = GameStatus.GAME_OVER;
         }
@@ -175,9 +156,10 @@ public class Snake {
         }
     }
 
-
+    // Returns snake's score
     public int getScore() {
         return score;
     }
+
 
 }

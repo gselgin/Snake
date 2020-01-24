@@ -1,8 +1,12 @@
+// Greg Elgin
+// Last updated: 1/23/20
+// Grid system coordinates used in Snake Game
 
-//TODO: Need to change to a grid system
+
 import java.util.LinkedList;
 
 public class Coordinates {
+
     private float x, y;
     private static Coordinates appleCoords;
     private static LinkedList<Coordinates> snakeList;

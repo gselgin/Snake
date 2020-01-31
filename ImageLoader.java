@@ -1,6 +1,7 @@
 // Greg Elgin
 // 1/31/20
 // Loads images into buffered images to be used by UIManager
+
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
 // Source: https://github.com/ahmetcandiroglu/Super-Mario-Bros
 

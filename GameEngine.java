@@ -210,6 +210,10 @@ public class GameEngine implements Runnable {
         return fps;
     }
 
+    public Thread getThread() {
+        return gameThread;
+    }
+
     public static Coordinates getAppleCoordinates() {
         return apple.getAppleCoords();
     }

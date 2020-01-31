@@ -176,6 +176,23 @@ public class GameEngine implements Runnable {
     }
 
 
+    // Compares coordinates for the head of the snake
+    public static boolean checkAppleCollision(Coordinates head) {
+        Coordinates appleCoord = getAppleCoordinates();
+        if (head.getX() == appleCoord.getX()) {
+            if (head.getY() == appleCoord.getY()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
+
     // Called from UIManager, returns the imageLoader in SimpleGameEngine
     public ImageLoader getImageLoader() {
         return imageLoader;

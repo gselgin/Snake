@@ -134,7 +134,7 @@ public class Snake {
     //TODO: Should this be in GameEngine? Add comments
     public static void checkCollisions() {
        head = snakeList.getLast();
-        if (Coordinates.compareCoordsApple(head)) {
+        if (GameEngine.checkAppleCollision(head)) {
             grow();
             GameEngine.apple = new Apple();
             score += 1;

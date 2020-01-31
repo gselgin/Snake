@@ -1,10 +1,9 @@
 // Greg Elgin
-// 12/16/19
+// 1/30/20
 // Game engine for Snake
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
 // Source: https://github.com/ahmetcandiroglu/Super-Mario-Bros
 
-// Imports JFrame
 //TODO: Organized: ButtonAction,
 import javax.swing.*;
 import java.awt.*;
@@ -13,45 +12,39 @@ import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
 
-
 // Implementing runnable allows threading within class
 public class GameEngine implements Runnable {
 
-    // Define uninitialized variables
     public static GameStatus status;
+    public static Apple apple;
     private static long fps;
     private long timeThisFrame;
     private Thread gameThread;
     private ImageLoader imageLoader;
     private UIManager uiManager;
     private ButtonAction last;
-    private boolean turning;
     private  ButtonAction action;
     private Queue <ButtonAction> directions = new LinkedList<>();
 
-    // height is more because the top toolbar adds to the pixels needed
-    public static final int WIDTH = 450, HEIGHT = 470;
-
-    private Coordinates snakePosition = new Coordinates(2,6);
-    public Snake snake;
-    public static Apple apple;
-
+    // height is greater because the top toolbar adds to the pixels needed
+    private static final int WIDTH = 450, HEIGHT = 470;
+    private Coordinates startPosition = new Coordinates(2,6);
+    private Snake snake;
     private boolean moveRight = false;
     private boolean moveLeft = false;
     private boolean moveUp = false;
     private boolean moveDown = false;
 
     // Create input manager to respond to user keystrokes
-    InputManager inputManager = new InputManager(this);
+    private InputManager inputManager = new InputManager(this);
 
 
     // Construct simple game engine
     private GameEngine() {
-
-        snake = new Snake(snakePosition);
+        snake = new Snake(startPosition);
         apple = new Apple();
 
-        // Construct frame
+        // Construct frame with all components
         imageLoader = new ImageLoader();
         uiManager = new UIManager(this);
         JFrame frame = new JFrame("Snake");
@@ -87,9 +80,6 @@ public class GameEngine implements Runnable {
         while (status == GameStatus.RUNNING) {
             long startFrameTime = System.currentTimeMillis();
 
-            if (turning) {
-                receiveInput(action);
-            }
             // Render and update the frame
             update();
             render();
@@ -111,10 +101,35 @@ public class GameEngine implements Runnable {
         }
     }
 
-    //TODO can i get rid of last direction enum?
 
     // Updates everything that needs to change from the last frame
     public void update() {
+        if (snake.getSnakeL().getLast().getX() % 1 == 0 && snake.getSnakeL().getLast().getY() % 1 == 0) {
+            if (directions.size() > 0) {
+                action = directions.remove();
+                if (action == ButtonAction.UP && last != ButtonAction.DOWN) {
+                    moveRight = false;
+                    moveLeft = false;
+                    moveDown = false;
+                    moveUp = true;
+                } else if (action == ButtonAction.DOWN && last != ButtonAction.UP) {
+                    moveRight = false;
+                    moveLeft = false;
+                    moveUp = false;
+                    moveDown = true;
+                } else if (action == ButtonAction.RIGHT && last != ButtonAction.LEFT) {
+                    moveLeft = false;
+                    moveUp = false;
+                    moveDown = false;
+                    moveRight = true;
+                } else if (action == ButtonAction.LEFT && last != ButtonAction.RIGHT) {
+                    moveRight = false;
+                    moveUp = false;
+                    moveDown = false;
+                    moveLeft = true;
+                }
+            }
+        }
         if (moveRight) {
             Snake.move(ButtonAction.RIGHT);
             last = ButtonAction.RIGHT;
@@ -133,43 +148,20 @@ public class GameEngine implements Runnable {
         }
     }
 
-    public void receiveInput(ButtonAction a) {
-        action = a;
-        if (snake.getSnakeL().getLast().getX() % 1 == 0 && snake.getSnakeL().getLast().getY() % 1 == 0) {
-            turning = false;
-            if (action == ButtonAction.UP && last != ButtonAction.DOWN) {
-                moveRight = false;
-                moveLeft = false;
-                moveDown = false;
-                moveUp = true;
-            }
-            if (action == ButtonAction.DOWN && last != ButtonAction.UP) {
-                moveRight = false;
-                moveLeft = false;
-                moveUp = false;
-                moveDown = true;
-            }
-            if (action == ButtonAction.RIGHT && last != ButtonAction.LEFT) {
-                moveLeft = false;
-                moveUp = false;
-                moveDown = false;
-                moveRight = true;
-            }
-            if (action == ButtonAction.LEFT && last != ButtonAction.RIGHT) {
-                moveRight = false;
-                moveUp = false;
-                moveDown = false;
-                moveLeft = true;
-            }
-        }
-        else {
-            turning = true;
-        }
-        if (action == ButtonAction.ENTER) {
-            reset();
-        }
 
+    public void receiveInput(ButtonAction action) {
+        if (status == GameStatus.RUNNING) {
+            if (directions.size() < 4) {
+                directions.add(action);
+            }
+        }
+        else if (status == GameStatus.GAME_OVER) {
+            if (action == ButtonAction.ENTER) {
+                reset();
+            }
+        }
     }
+
 
     // Call UIManager to draw frame
     private void render() {

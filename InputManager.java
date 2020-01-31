@@ -1,10 +1,8 @@
 // Greg Elgin
-// 12/16/19
+// 1/30/20
 // Input manager listens for user keystrokes
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
 // Source: https://github.com/ahmetcandiroglu/Super-Mario-Bros
-
-import sun.jvm.hotspot.utilities.GenericGrowableArray;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,19 +10,19 @@ import java.awt.event.KeyListener;
 
 public class InputManager implements KeyListener {
     private GameEngine engine;
-    private GameStatus status;
 
     // Construct InputManager
     InputManager(GameEngine engine) {
         this.engine = engine;
     }
 
-
+    // Listens for keys being pressed
     public void keyPressed(KeyEvent event) {
-        status = engine.getStatus();
+        GameStatus status = engine.getStatus();
         int keyCode = event.getKeyCode();
         ButtonAction action = ButtonAction.NO_ACTION;
 
+        // If the game is running set action equal to the direction key pressed
         if (status == GameStatus.RUNNING) {
             if (keyCode == KeyEvent.VK_RIGHT) {
                 action = ButtonAction.RIGHT;
@@ -39,21 +37,19 @@ public class InputManager implements KeyListener {
                 action = ButtonAction.DOWN;
             }
         }
+        // If the game is over listen for enter key pressed
         else if (status == GameStatus.GAME_OVER) {
             if (keyCode == KeyEvent.VK_ENTER) {
                 action = ButtonAction.ENTER;
             }
         }
-
-            SendInput(action);
+        SendInput(action);
     }
 
     public void keyReleased(KeyEvent e) {}
-
     public void keyTyped(KeyEvent e) {}
 
-
-
+    // Send action input to GameEngine receiveInput function
     private void SendInput(ButtonAction input) {
         engine.receiveInput(input);
     }

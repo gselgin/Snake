@@ -1,6 +1,7 @@
 // Greg Elgin
 // 02/02/20
-// Game engine for Snake
+// Game Engine for snake game
+
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
 // Source: https://github.com/ahmetcandiroglu/Super-Mario-Bros
 
@@ -14,34 +15,29 @@ import java.util.concurrent.TimeUnit;
 // Implementing runnable allows threading within class
 public class GameEngine implements Runnable {
 
+    // height is greater because the top toolbar adds to the pixels needed
+    private static final int WIDTH = 450, HEIGHT = 470;
+    private final int DELAY_TIME = 70;
+    private final Coordinates START_POSITION = new Coordinates(2,6);
+
     public static GameStatus status;
     public static Apple apple;
-    private static long fps;
-    private long timeThisFrame;
+    public static int highScore;
     private Thread gameThread;
     private ImageLoader imageLoader;
     private UIManager uiManager;
     private ButtonAction last;
-    private  ButtonAction action;
     private Queue <ButtonAction> directions = new LinkedList<>();
-    public static int highScore;
-
-    // height is greater because the top toolbar adds to the pixels needed
-    private static final int WIDTH = 450, HEIGHT = 470;
-    private Coordinates startPosition = new Coordinates(2,6);
     private static Snake snake;
     private boolean moveRight = false;
     private boolean moveLeft = false;
     private boolean moveUp = false;
     private boolean moveDown = false;
 
-    // Create input manager to respond to user keystrokes
-    private InputManager inputManager = new InputManager(this);
-
 
     // Construct simple game engine
     private GameEngine() {
-        snake = new Snake(startPosition);
+        snake = new Snake(START_POSITION);
         apple = new Apple();
 
         // Construct frame with all components
@@ -54,6 +50,7 @@ public class GameEngine implements Runnable {
         frame.setSize(WIDTH, HEIGHT);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+        InputManager inputManager = new InputManager(this);
         frame.addKeyListener(inputManager);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -78,35 +75,30 @@ public class GameEngine implements Runnable {
 
     public void run() {
         while (status == GameStatus.RUNNING) {
-            long startFrameTime = System.currentTimeMillis();
-
             // Render and update the frame
             update();
             render();
-            // Delay by 1 millisecond so that timeThisFrame is always > 0
+            // Delay by millisecond so that the speed of the snake is not too fast
             try
             {
-                TimeUnit.MILLISECONDS.sleep(70);
+                TimeUnit.MILLISECONDS.sleep(DELAY_TIME);
             }
             catch(InterruptedException ex)
             {
                 System.out.println("ERROR");
-            }
-            // This is the number of milliseconds it took to execute update and draw for this frame
-            timeThisFrame = System.currentTimeMillis() - startFrameTime;
-            //If the time is not zero, calculate the frames per second
-            if (timeThisFrame > 0) {
-                fps = 1000 / timeThisFrame;
             }
         }
     }
 
 
     // Updates everything that needs to change from the last frame
-    public void update() {
+    private void update() {
+        // If the snake is in the center of a grid square then allow it to take the next direciton
+        // from the directions queue
         if (snake.getSnakeL().getLast().getX() % 1 == 0 && snake.getSnakeL().getLast().getY() % 1 == 0) {
             if (directions.size() > 0) {
-                action = directions.remove();
+                ButtonAction action = directions.remove();
+                // Set the snakes direction of travel based on the action taken from the directions queue
                 if (action == ButtonAction.UP && last != ButtonAction.DOWN) {
                     moveRight = false;
                     moveLeft = false;
@@ -130,6 +122,7 @@ public class GameEngine implements Runnable {
                 }
             }
         }
+        // Send the call to the snake object to move
         if (moveRight) {
             Snake.move(ButtonAction.RIGHT);
             last = ButtonAction.RIGHT;
@@ -148,9 +141,11 @@ public class GameEngine implements Runnable {
         }
     }
 
-
+    // Receive the inout from the input manager
     public void receiveInput(ButtonAction action) {
         if (status == GameStatus.RUNNING) {
+            // Directions queue added to optimize input flow
+            // Capped at size 3 so that user does not input too many steps ahead
             if (directions.size() < 4) {
                 directions.add(action);
             }
@@ -169,10 +164,9 @@ public class GameEngine implements Runnable {
     }
 
 
-    // Resets the game
     private void reset() {
         // Reset snake to starting position and clear all movement
-        this.snake = new Snake(startPosition);
+        snake = new Snake(START_POSITION);
         while (directions.size() > 0){
             directions.remove();
         }
@@ -186,7 +180,8 @@ public class GameEngine implements Runnable {
     }
 
 
-    // Compares coordinates for the head of the snake
+    // Compares coordinates for the head of the snake to the apple position
+    // returns true if they collide, false if not
     public static boolean checkAppleCollision(Coordinates head) {
         Coordinates appleCoord = getAppleCoordinates();
         if (head.getX() == appleCoord.getX()) {
@@ -203,21 +198,13 @@ public class GameEngine implements Runnable {
     }
 
 
-    // Called from UIManager, returns the imageLoader in SimpleGameEngine
     public ImageLoader getImageLoader() {
         return imageLoader;
     }
 
-
-
     // Called by UI manager to paint the snake, returns the snake objects list
     public LinkedList<Coordinates> getSnakeList() {
         return snake.getSnakeL();
-    }
-
-
-    public static long getfps() {
-        return fps;
     }
 
     public Thread getThread() {
@@ -232,15 +219,8 @@ public class GameEngine implements Runnable {
         return status;
     }
 
-    public int getWidth() {
-        return WIDTH;
-    }
-    public int getHeight() {
-        return HEIGHT;
-    }
-
     public static int getScore() {
-        return snake.getScore();
+        return Snake.getScore();
     }
 
     public static int getHighScore() {

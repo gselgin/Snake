@@ -10,7 +10,6 @@
 // Image Source: https://pngimg.com/uploads/game_over/game_over_PNG14.png
 // Font Source: https://pngimg.com/uploads/game_over/game_over_PNG14.png
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -110,14 +109,13 @@ public class UIManager extends JPanel {
         g2.drawImage(appleImage, 25,10, 35, 35 ,null);
         g2.setColor(Color.BLACK);
         g2.setFont(restartFont.deriveFont(30f));
-        g2.drawString(Integer.toString(engine.getScore()), 70, 40);
+        g2.drawString(Integer.toString(GameEngine.getScore()), 70, 40);
 
-        //TODO: high score board
 
         // Draw high score board
         g2.setFont(restartFont.deriveFont(25f));
         g2.drawString("High Score:", 300, 40);
-        g2.drawString(Integer.toString(engine.getHighScore()), 400, 40);
+        g2.drawString(Integer.toString(GameEngine.getHighScore()), 400, 40);
 
 
         // If the game is over draw game over graphic
@@ -126,7 +124,7 @@ public class UIManager extends JPanel {
             g2.setFont(restartFont.deriveFont(40f));
             g2.setColor(Color.BLACK);
 
-            // Prompt user to input initials if new high score
+            // Display that there is a new high score if there is a new high score
             if (GameEngine.status == GameStatus.HIGH_SCORE) {
                 g2.drawString("NEW HIGH SCORE!", 120, 370);
                 String restartStr = "Press ENTER To Restart";

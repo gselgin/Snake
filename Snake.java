@@ -83,8 +83,7 @@ public class Snake {
     public static void move(ButtonAction d) {
         // Set snake objects direction
         direction = d;
-        // Get fps of the game
-        float fps = GameEngine.getfps();
+
         // Get the head coordinates of the snake
         head = snakeList.getLast();
 

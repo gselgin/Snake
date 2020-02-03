@@ -1,5 +1,5 @@
 // Greg Elgin
-// 02/03/20
+// Last Updated: 02/03/20
 // Game Engine for snake game
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
-// TODO: static
 
 // Implementing runnable allows threading within class
 public class GameEngine implements Runnable {
@@ -24,12 +23,12 @@ public class GameEngine implements Runnable {
     public static GameStatus status;
     public static Apple apple;
     public static int highScore;
+    private static Snake snake;
     private Thread gameThread;
     private ImageLoader imageLoader;
     private UIManager uiManager;
     private ButtonAction last;
     private Queue <ButtonAction> directions = new LinkedList<>();
-    private static Snake snake;
     private boolean moveRight = false;
     private boolean moveLeft = false;
     private boolean moveUp = false;

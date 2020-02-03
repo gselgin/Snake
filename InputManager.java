@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last Updated: 1/30/20
+// Last Updated: 02/03/20
 // Input manager listens for user keystrokes
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
@@ -39,7 +39,7 @@ public class InputManager implements KeyListener {
             }
         }
         // If the game is over listen for enter key pressed
-        else if (status == GameStatus.GAME_OVER) {
+        else if (status == GameStatus.GAME_OVER || status == GameStatus.HIGH_SCORE) {
             if (keyCode == KeyEvent.VK_ENTER) {
                 action = ButtonAction.ENTER;
             }

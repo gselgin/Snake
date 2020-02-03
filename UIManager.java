@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last Updated: 01/31/20
+// Last Updated: 02/02/20
 // User Interface Manager for Snake game's Game Engine
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
@@ -104,22 +104,39 @@ public class UIManager extends JPanel {
             }
         }
 
-        //Draw the score to the top of the screen
+        // Draw the score to the top of the screen
         g2.setColor(Color.WHITE);
         g2.fillRect(0,0,708,60);
-        g2.drawImage(appleImage, 180,10, 35, 35 ,null);
+        g2.drawImage(appleImage, 25,10, 35, 35 ,null);
         g2.setColor(Color.BLACK);
         g2.setFont(restartFont.deriveFont(30f));
-        String score = engine.getScoreString();
-        g2.drawString(score, 220, 40);
+        g2.drawString(Integer.toString(engine.getScore()), 70, 40);
+
+        //TODO: high score board
+
+        // Draw high score board
+        g2.setFont(restartFont.deriveFont(25f));
+        g2.drawString("High Score:", 300, 40);
+        g2.drawString(Integer.toString(engine.getHighScore()), 400, 40);
+
 
         // If the game is over draw game over graphic
-        if (GameEngine.status == GameStatus.GAME_OVER) {
+        if (GameEngine.status == GameStatus.GAME_OVER || GameEngine.status == GameStatus.HIGH_SCORE) {
             g2.drawImage(gameOverImage, 90, 70, 250, 250,null);
-            g2.setFont(restartFont.deriveFont(30f));
+            g2.setFont(restartFont.deriveFont(40f));
             g2.setColor(Color.BLACK);
-            String restartStr = "Press ENTER To Restart";
-            g2.drawString(restartStr, 100, 350);
+
+            // Prompt user to input initials if new high score
+            if (GameEngine.status == GameStatus.HIGH_SCORE) {
+                g2.drawString("NEW HIGH SCORE!", 120, 370);
+                String restartStr = "Press ENTER To Restart";
+                g2.drawString(restartStr, 80, 430);
+
+            }
+            else {
+                String restartStr = "Press ENTER To Restart";
+                g2.drawString(restartStr, 80, 370);
+            }
         }
     }
 }

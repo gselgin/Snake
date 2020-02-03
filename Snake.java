@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last updated: 1/23/20
+// Last updated: 02/02/20
 // Snake used in GameEngine Snake Game
 
 
@@ -133,7 +133,7 @@ public class Snake {
 
     //TODO: Should this be in GameEngine? Add comments
     public static void checkCollisions() {
-       head = snakeList.getLast();
+        head = snakeList.getLast();
         if (GameEngine.checkAppleCollision(head)) {
             grow();
             GameEngine.apple = new Apple();
@@ -154,10 +154,16 @@ public class Snake {
                 }
             }
         }
+        if (GameEngine.status == GameStatus.GAME_OVER) {
+            if (score > GameEngine.getHighScore()) {
+                GameEngine.highScore = getScore();
+                GameEngine.status = GameStatus.HIGH_SCORE;
+            }
+        }
     }
 
     // Returns snake's score
-    public int getScore() {
+    public static int getScore() {
         return score;
     }
 

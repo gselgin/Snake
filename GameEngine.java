@@ -1,10 +1,9 @@
 // Greg Elgin
-// 1/30/20
+// 02/02/20
 // Game engine for Snake
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
 // Source: https://github.com/ahmetcandiroglu/Super-Mario-Bros
 
-//TODO: Organized: ButtonAction,
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -25,11 +24,12 @@ public class GameEngine implements Runnable {
     private ButtonAction last;
     private  ButtonAction action;
     private Queue <ButtonAction> directions = new LinkedList<>();
+    public static int highScore;
 
     // height is greater because the top toolbar adds to the pixels needed
     private static final int WIDTH = 450, HEIGHT = 470;
     private Coordinates startPosition = new Coordinates(2,6);
-    private Snake snake;
+    private static Snake snake;
     private boolean moveRight = false;
     private boolean moveLeft = false;
     private boolean moveUp = false;
@@ -155,7 +155,7 @@ public class GameEngine implements Runnable {
                 directions.add(action);
             }
         }
-        else if (status == GameStatus.GAME_OVER) {
+        else {
             if (action == ButtonAction.ENTER) {
                 reset();
             }
@@ -171,8 +171,18 @@ public class GameEngine implements Runnable {
 
     // Resets the game
     private void reset() {
-        GameEngine engine = new GameEngine();
+        // Reset snake to starting position and clear all movement
+        this.snake = new Snake(startPosition);
+        while (directions.size() > 0){
+            directions.remove();
+        }
+        moveRight = false;
+        moveLeft = false;
+        moveDown = false;
+        moveUp = false;
 
+        // Start new game
+        start();
     }
 
 
@@ -229,8 +239,12 @@ public class GameEngine implements Runnable {
         return HEIGHT;
     }
 
-    public String getScoreString() {
-        return Integer.toString(snake.getScore());
+    public static int getScore() {
+        return snake.getScore();
+    }
+
+    public static int getHighScore() {
+        return highScore;
     }
 
 

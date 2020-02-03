@@ -1,5 +1,5 @@
 // Greg Elgin
-// 02/02/20
+// 02/03/20
 // Game Engine for snake game
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
+// TODO: static
 
 // Implementing runnable allows threading within class
 public class GameEngine implements Runnable {

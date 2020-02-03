@@ -1,16 +1,15 @@
 // Greg Elgin
-// Last updated: 02/02/20
-// Snake used in GameEngine Snake Game
-
+// Last updated: 02/03/20
+// Snake used in GameEngine
 
 import java.util.LinkedList;
+
 
 public class Snake {
 
     private final int INITIAL_SIZE = 3;
-    private static final float SNAKE_SPEED = (float).5;
+    private static final float SNAKE_SPEED = (float)0.5;
 
-    //TODO: static
     private static ButtonAction direction;
     private static LinkedList<Coordinates> snakeList;
     private static Coordinates head;
@@ -23,7 +22,6 @@ public class Snake {
 
     // Constructor creates the Snake object of a linked list filled with coordinate objects
     public Snake (Coordinates initialCoords) {
-        // Create linked list
         snakeList = new LinkedList<>();
 
         // Create snake head
@@ -47,9 +45,9 @@ public class Snake {
     }
 
 
-    // Add a part to the end of the snake object
-    public static void grow() {
-        // Execute twice
+    // Add a body piece to the end of the snake object
+    private static void grow() {
+        // Execute twice (due to movement rate in order for snake to grow 1 grid square, 2 pieces must be added)
         for (int i = 0; i < 2; i++) {
             // Get the tail coordinates of the snake
             Coordinates tail = snakeList.getFirst();
@@ -78,7 +76,6 @@ public class Snake {
     }
 
 
-    // TODO: the snake briefly has 2 heads, should I bother to fix?
     // Move the snake object
     public static void move(ButtonAction d) {
         // Set snake objects direction
@@ -112,14 +109,14 @@ public class Snake {
 
         // Move each body part of the snake
         for (int i = 0; i < (snakeList.size() - 2); i++) {
-            Coordinates current = snakeList.get(i);
             Coordinates next = snakeList.get(i + 1);
             snakeList.set(i,next);
-
         }
 
         // Remove the old head from the snake object
         snakeList.remove(snakeList.size()-2);
+
+        // Every frame of movement checks collisions
         checkCollisions();
     }
 
@@ -130,21 +127,25 @@ public class Snake {
     }
 
 
-    //TODO: Should this be in GameEngine? Add comments
-    public static void checkCollisions() {
+    // Checks if snake has collided with anything
+    private static void checkCollisions() {
         head = snakeList.getLast();
+        // If collided with apple then grow and generate a new apple
         if (GameEngine.checkAppleCollision(head)) {
             grow();
             GameEngine.apple = new Apple();
             score += 1;
         }
 
+        // If the snake has hit the edge of the screen then game is over
         if (head.getX() < 0 || head.getX() > 14) {
             GameEngine.status = GameStatus.GAME_OVER;
         }
         if (head.getY() < 2 || head.getY() > 14) {
             GameEngine.status = GameStatus.GAME_OVER;
         }
+
+        // If snake head has hit a body piece then game is over
         for (int i = 0; i < (snakeList.size() - 2); i++) {
             Coordinates body = snakeList.get(i);
             if (body.getX() == head.getX()) {
@@ -153,6 +154,8 @@ public class Snake {
                 }
             }
         }
+
+        // If the game is over then update high score as needed
         if (GameEngine.status == GameStatus.GAME_OVER) {
             if (score > GameEngine.getHighScore()) {
                 GameEngine.highScore = getScore();
@@ -161,10 +164,8 @@ public class Snake {
         }
     }
 
-    // Returns snake's score
+
     public static int getScore() {
         return score;
     }
-
-
 }

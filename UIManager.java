@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last Updated: 02/02/20
+// Last Updated: 02/03/20
 // User Interface Manager for Snake game's Game Engine
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/

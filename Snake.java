@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class Snake {
 
-    private final int INITIAL_SIZE = 3;
+    private final int INITIAL_SIZE = 200;
     private static final float SNAKE_SPEED = (float)0.5;
 
     private static ButtonAction direction;
@@ -18,6 +18,7 @@ public class Snake {
     private static float newX;
     private static float newY;
     private static int score;
+    private static boolean validAppleSpawn;
 
 
     // Constructor creates the Snake object of a linked list filled with coordinate objects
@@ -134,6 +135,16 @@ public class Snake {
         if (GameEngine.checkAppleCollision(head)) {
             grow();
             GameEngine.apple = new Apple();
+            validAppleSpawn = false;
+            while (!validAppleSpawn) {
+                validAppleSpawn = true;
+                for (int i = 0; i < snakeList.size(); i++) {
+                    if (GameEngine.checkAppleCollision(snakeList.get(i))) {
+                        GameEngine.apple = new Apple();
+                        validAppleSpawn = false;
+                    }
+                }
+            }
             score += 1;
         }
 

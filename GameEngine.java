@@ -93,7 +93,7 @@ public class GameEngine implements Runnable {
 
     // Updates everything that needs to change from the last frame
     private void update() {
-        // If the snake is in the center of a grid square then allow it to take the next direciton
+        // If the snake is in the center of a grid square then allow it to take the next direction
         // from the directions queue
         if (snake.getSnakeL().getLast().getX() % 1 == 0 && snake.getSnakeL().getLast().getY() % 1 == 0) {
             if (directions.size() > 0) {

@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last Updated: 02/03/20
+// Last Updated: 04/03/20
 // User Interface Manager for Snake game's Game Engine
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
@@ -29,7 +29,7 @@ public class UIManager extends JPanel {
 
 
     // Constructor takes the game engine as a parameter, calls image loader to buffer images
-    public UIManager(GameEngine engine) {
+    UIManager(GameEngine engine) {
         this.engine = engine;
         ImageLoader loader = engine.getImageLoader();
         headImage = loader.loadImage("Resources/RedSquare.png");

@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last Updated: 02/03/20
+// Last Updated: 04/19/20
 // Game Engine for snake game
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
@@ -17,12 +17,11 @@ public class GameEngine implements Runnable {
 
     // height is greater because the top toolbar adds to the pixels needed
     private static final int WIDTH = 450, HEIGHT = 470;
-    private final int DELAY_TIME = 70;
     private final Coordinates START_POSITION = new Coordinates(2,6);
 
-    public static GameStatus status;
-    public static Apple apple;
-    public static int highScore;
+    static GameStatus status;
+    static Apple apple;
+    static int highScore;
     private static Snake snake;
     private Thread gameThread;
     private ImageLoader imageLoader;
@@ -74,6 +73,9 @@ public class GameEngine implements Runnable {
 
 
     public void run() {
+        // Initialize delay time
+        final int DELAY_TIME = 70;
+
         while (status == GameStatus.RUNNING) {
             // Render and update the frame
             update();
@@ -142,7 +144,7 @@ public class GameEngine implements Runnable {
     }
 
     // Receive the inout from the input manager
-    public void receiveInput(ButtonAction action) {
+    void receiveInput(ButtonAction action) {
         if (status == GameStatus.RUNNING) {
             // Directions queue added to optimize input flow
             // Capped at size 3 so that user does not input too many steps ahead
@@ -182,15 +184,10 @@ public class GameEngine implements Runnable {
 
     // Compares coordinates for the head of the snake to the apple position
     // returns true if they collide, false if not
-    public static boolean checkAppleCollision(Coordinates head) {
+    static boolean checkAppleCollision(Coordinates head) {
         Coordinates appleCoord = getAppleCoordinates();
         if (head.getX() == appleCoord.getX()) {
-            if (head.getY() == appleCoord.getY()) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return head.getY() == appleCoord.getY();
         }
         else {
             return false;
@@ -198,32 +195,32 @@ public class GameEngine implements Runnable {
     }
 
 
-    public ImageLoader getImageLoader() {
+    ImageLoader getImageLoader() {
         return imageLoader;
     }
 
     // Called by UI manager to paint the snake, returns the snake objects list
-    public LinkedList<Coordinates> getSnakeList() {
+    LinkedList<Coordinates> getSnakeList() {
         return snake.getSnakeL();
     }
 
-    public Thread getThread() {
+    Thread getThread() {
         return gameThread;
     }
 
-    public static Coordinates getAppleCoordinates() {
+    static Coordinates getAppleCoordinates() {
         return apple.getAppleCoords();
     }
 
-    public GameStatus getStatus() {
+    GameStatus getStatus() {
         return status;
     }
 
-    public static int getScore() {
+    static int getScore() {
         return Snake.getScore();
     }
 
-    public static int getHighScore() {
+    static int getHighScore() {
         return highScore;
     }
 

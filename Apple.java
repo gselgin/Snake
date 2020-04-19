@@ -1,22 +1,22 @@
 // Greg Elgin
-// Last Updated: 1/31/20
+// Last Updated: 04/19/20
 // Apple object generated at random grid point, used in Snake game
 
 import java.util.Random;
 
 
-public class Apple {
+class Apple {
     private Coordinates appleCoords;
-    private Random rand = new Random();
 
     // Construct an apple object containing a random set of coordinates
-    public Apple() {
+    Apple() {
+        Random rand = new Random();
         int x = rand.nextInt(14);
         int y = rand.nextInt(12) + 2;
         appleCoords = new Coordinates(x, y);
     }
 
-    public Coordinates getAppleCoords() {
+    Coordinates getAppleCoords() {
         return appleCoords;
     }
 }

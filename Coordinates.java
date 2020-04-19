@@ -1,22 +1,22 @@
 // Greg Elgin
-// Last updated: 1/31/20
+// Last updated: 04/19/20
 // Grid system coordinates used in Snake Game
 
 
-public class Coordinates {
+class Coordinates {
     private float x, y;
 
     // Construct coordinate object using x and y position given
-    public Coordinates(float xPosition, float yPosition) {
+    Coordinates(float xPosition, float yPosition) {
         x = xPosition;
         y = yPosition;
     }
 
-    public float getX() {
+    float getX() {
         return x;
     }
 
-    public float getY() {
+    float getY() {
         return y;
     }
 }

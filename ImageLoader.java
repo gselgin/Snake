@@ -1,5 +1,5 @@
 // Greg Elgin
-// 1/31/20
+// Last updated: 04/19/20
 // Loads images into buffered images to be used by UIManager
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
@@ -10,11 +10,11 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 
 
-public class ImageLoader {
+class ImageLoader {
 
     // Takes image path as parameter and returns buffered image
     // Catches exceptions and continues game with files found
-    public BufferedImage loadImage(String path) {
+    BufferedImage loadImage(String path) {
         BufferedImage imageToReturn = null;
 
         try {

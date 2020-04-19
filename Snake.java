@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last updated: 02/03/20
+// Last updated: 04/19/20
 // Snake used in GameEngine
 
 import java.util.LinkedList;
@@ -7,7 +7,6 @@ import java.util.LinkedList;
 
 public class Snake {
 
-    private final int INITIAL_SIZE = 200;
     private static final float SNAKE_SPEED = (float)0.5;
 
     private static ButtonAction direction;
@@ -18,11 +17,12 @@ public class Snake {
     private static float newX;
     private static float newY;
     private static int score;
-    private static boolean validAppleSpawn;
 
 
     // Constructor creates the Snake object of a linked list filled with coordinate objects
     public Snake (Coordinates initialCoords) {
+        // Initialize snake size
+        final int INITIAL_SIZE = 3;
         snakeList = new LinkedList<>();
 
         // Create snake head
@@ -78,7 +78,7 @@ public class Snake {
 
 
     // Move the snake object
-    public static void move(ButtonAction d) {
+    static void move(ButtonAction d) {
         // Set snake objects direction
         direction = d;
 
@@ -123,13 +123,15 @@ public class Snake {
 
 
     // Called by the engine, returns the snake object's list
-    public LinkedList<Coordinates> getSnakeL() {
+    LinkedList<Coordinates> getSnakeL() {
         return snakeList;
     }
 
 
     // Checks if snake has collided with anything
     private static void checkCollisions() {
+        boolean validAppleSpawn;
+
         head = snakeList.getLast();
         // If collided with apple then grow and generate a new apple
         if (GameEngine.checkAppleCollision(head)) {
@@ -138,8 +140,8 @@ public class Snake {
             validAppleSpawn = false;
             while (!validAppleSpawn) {
                 validAppleSpawn = true;
-                for (int i = 0; i < snakeList.size(); i++) {
-                    if (GameEngine.checkAppleCollision(snakeList.get(i))) {
+                for (Coordinates c : snakeList) {
+                    if (GameEngine.checkAppleCollision(c)) {
                         GameEngine.apple = new Apple();
                         validAppleSpawn = false;
                     }
@@ -176,7 +178,7 @@ public class Snake {
     }
 
 
-    public static int getScore() {
+    static int getScore() {
         return score;
     }
 }

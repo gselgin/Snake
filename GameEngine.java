@@ -1,9 +1,11 @@
 // Greg Elgin
-// Last Updated: 04/19/20
+// Last Updated: 04/23/20
 // Game Engine for snake game
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
 // Source: https://github.com/ahmetcandiroglu/Super-Mario-Bros
+
+// TODO: IF YOU DIE ON MOUSE, SPAWNS MOUSE AT START OF NEXT GAME, NOT SUPPOSED TO HAPPEN, FIX
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +39,7 @@ public class GameEngine implements Runnable {
     // Construct simple game engine
     private GameEngine() {
         snake = new Snake(START_POSITION);
-        apple = new Apple();
+        apple = new Apple("apple");
 
         // Construct frame with all components
         imageLoader = new ImageLoader();
@@ -141,6 +143,11 @@ public class GameEngine implements Runnable {
             Snake.move(ButtonAction.DOWN);
             last = ButtonAction.DOWN;
         }
+
+        // If apple is a mouse, move mouse at half the speed of the snake
+        if (apple.getType().equals("mouse")) {
+            apple.move();
+        }
     }
 
     // Receive the inout from the input manager
@@ -223,6 +230,8 @@ public class GameEngine implements Runnable {
     static int getHighScore() {
         return highScore;
     }
+
+    static String getAppleType() {return apple.getType();}
 
 
     // Main call

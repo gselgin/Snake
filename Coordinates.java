@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last updated: 04/19/20
+// Last updated: 04/23/20
 // Grid system coordinates used in Snake Game
 
 
@@ -18,5 +18,13 @@ class Coordinates {
 
     float getY() {
         return y;
+    }
+
+    void setX(float newX) {
+        x = newX;
+    }
+
+    void setY(float newY) {
+        y = newY;
     }
 }

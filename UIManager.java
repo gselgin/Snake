@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last Updated: 04/03/20
+// Last Updated: 04/23/20
 // User Interface Manager for Snake game's Game Engine
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
@@ -8,6 +8,7 @@
 // Image Source: https://www.freeiconspng.com/uploads/green-square-1.png
 // Image Source: http://pluspng.com/img-png/teacher-with-apple-png-apple-tattoo-for-teacher-300.png
 // Image Source: https://pngimg.com/uploads/game_over/game_over_PNG14.png
+// Image Source: https://favpng.com/png_download/Hkm454aF
 // Font Source: https://pngimg.com/uploads/game_over/game_over_PNG14.png
 
 import javax.swing.*;
@@ -23,9 +24,12 @@ public class UIManager extends JPanel {
     private GameEngine engine;
     private BufferedImage headImage;
     private BufferedImage appleImage;
+    private BufferedImage mouseImage;
     private BufferedImage bodyImage;
     private BufferedImage gameOverImage;
     private Font restartFont;
+    private Color lightGreen = new Color (30, 215, 96);
+    private Color darkGreen = new Color (15, 190, 76);
 
 
     // Constructor takes the game engine as a parameter, calls image loader to buffer images
@@ -35,6 +39,7 @@ public class UIManager extends JPanel {
         headImage = loader.loadImage("Resources/RedSquare.png");
         bodyImage = loader.loadImage("Resources/GreenSquare.png");
         appleImage = loader.loadImage("Resources/apple.png");
+        mouseImage = loader.loadImage("Resources/mouse.png");
         gameOverImage = loader.loadImage("Resources/GameOver.png");
 
         // Load the font used when game starts, this improves runtime
@@ -70,11 +75,11 @@ public class UIManager extends JPanel {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 if ((i + j) % 2 == 0) {
-                    g2.setColor(Color.GRAY);
+                    g2.setColor(lightGreen);
                     g2.fillRect(i*30, j*30, 30, 30);
                 }
                 else {
-                    g2.setColor(Color.LIGHT_GRAY);
+                    g2.setColor(darkGreen);
                     g2.fillRect(i*30, j*30, 30, 30);
                 }
             }
@@ -82,11 +87,21 @@ public class UIManager extends JPanel {
 
         // Get apple coordinates and draw into game
         Coordinates appleCoordinates = GameEngine.getAppleCoordinates();
+        String type = GameEngine.getAppleType();
         float appleX = appleCoordinates.getX();
         float appleY = appleCoordinates.getY();
-        // Gets grid coordinate and multiplies by 30 to get the pixel number. Adding 4 pixels places the apple
-        // in the center of the grip square
-        g2.drawImage(appleImage, (Math.round(appleX)*30) + 4, (Math.round(appleY)*30) + 4, 22, 22, null);
+
+        // If the score is a multiple of 10 draw apple object as a mouse instead of an apple. Adding 2 pixels places
+        // the mouse in the center of the grid square
+        if (type.equals("mouse")) {
+            g2.drawImage(mouseImage, (Math.round(appleX)*30), (Math.round(appleY)*30) + 2, 26, 26, null);
+
+        }
+        else {
+            // Gets grid coordinate and multiplies by 30 to get the pixel number. Adding 4 pixels places the apple
+            // in the center of the grip square
+            g2.drawImage(appleImage, (Math.round(appleX)*30) + 4, (Math.round(appleY)*30) + 4, 22, 22, null);
+        }
 
         // Draw each snake piece into game
         LinkedList<Coordinates> snakeList = engine.getSnakeList();

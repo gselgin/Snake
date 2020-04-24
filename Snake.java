@@ -1,5 +1,5 @@
 // Greg Elgin
-// Last updated: 04/19/20
+// Last updated: 04/23/20
 // Snake used in GameEngine
 
 import java.util.LinkedList;
@@ -131,23 +131,23 @@ public class Snake {
     // Checks if snake has collided with anything
     private static void checkCollisions() {
         boolean validAppleSpawn;
-
         head = snakeList.getLast();
+
         // If collided with apple then grow and generate a new apple
         if (GameEngine.checkAppleCollision(head)) {
+            score += 1;
             grow();
-            GameEngine.apple = new Apple();
+            spawnApple();
             validAppleSpawn = false;
             while (!validAppleSpawn) {
                 validAppleSpawn = true;
                 for (Coordinates c : snakeList) {
                     if (GameEngine.checkAppleCollision(c)) {
-                        GameEngine.apple = new Apple();
+                        spawnApple();
                         validAppleSpawn = false;
                     }
                 }
             }
-            score += 1;
         }
 
         // If the snake has hit the edge of the screen then game is over
@@ -174,6 +174,16 @@ public class Snake {
                 GameEngine.highScore = getScore();
                 GameEngine.status = GameStatus.HIGH_SCORE;
             }
+        }
+    }
+
+    private static void spawnApple() {
+        if (score % 10 == 0) {
+            GameEngine.apple = new Apple("mouse");
+        }
+        else {
+            GameEngine.apple = new Apple("apple");
+
         }
     }
 

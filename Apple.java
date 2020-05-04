@@ -19,6 +19,11 @@ class Apple {
         appleCoords = new Coordinates(x, y);
     }
 
+    Apple(String appleOrMouse, int x, int y) {
+        type = appleOrMouse;
+        appleCoords = new Coordinates(x, y);
+    }
+
     Coordinates getAppleCoords() {
         return appleCoords;
     }

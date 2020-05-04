@@ -5,5 +5,6 @@
 public enum GameStatus {
     RUNNING,
     GAME_OVER,
-    HIGH_SCORE
+    HIGH_SCORE,
+    PLAYER_WON
 }

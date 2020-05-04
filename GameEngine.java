@@ -7,6 +7,7 @@
 
 // TODO: IF YOU DIE ON MOUSE, SPAWNS MOUSE AT START OF NEXT GAME, NOT SUPPOSED TO HAPPEN, FIX
 // TODO: Make Mouse PNG move smoother
+// TODO: Make game won screen look nice
 
 import javax.swing.*;
 import java.awt.*;

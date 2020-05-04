@@ -151,6 +151,11 @@ public class UIManager extends JPanel {
                 g2.drawString(restartStr, 80, 370);
             }
         }
+
+        // If the player won the game, draw game won screen
+        if (GameEngine.status == GameStatus.PLAYER_WON) {
+            g2.drawString("YOU WON!!!", 120, 370);
+        }
     }
 }
 

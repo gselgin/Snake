@@ -43,6 +43,7 @@ public class Snake {
 
         // initialize score
         score = 0;
+
     }
 
 
@@ -74,6 +75,7 @@ public class Snake {
             tail = new Coordinates(x,y);
             snakeList.add(0, tail);
         }
+
     }
 
 
@@ -137,15 +139,22 @@ public class Snake {
         if (GameEngine.checkAppleCollision(head)) {
             score += 1;
             grow();
-            spawnApple();
-            validAppleSpawn = false;
-            while (!validAppleSpawn) {
-                validAppleSpawn = true;
-                for (Coordinates c : snakeList) {
-                    if (GameEngine.checkAppleCollision(c)) {
-                        spawnApple();
-                        validAppleSpawn = false;
-                    }
+            if (snakeList.size() == 389) {
+                GameEngine.status = GameStatus.PLAYER_WON;
+                spawnApple0();
+            }
+            else {
+                spawnApple();
+                validAppleSpawn = false;
+                while (!validAppleSpawn) {
+
+                    validAppleSpawn = true;
+                    for (Coordinates c : snakeList) {
+                        if (GameEngine.checkAppleCollision(c)) {
+                            spawnApple();
+                            validAppleSpawn = false;
+                        }
+                     }
                 }
             }
         }
@@ -185,6 +194,10 @@ public class Snake {
             GameEngine.apple = new Apple("apple");
 
         }
+    }
+
+    private static void spawnApple0() {
+        GameEngine.apple = new Apple("apple", 0, 0);
     }
 
 

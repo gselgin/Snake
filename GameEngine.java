@@ -1,11 +1,12 @@
 // Greg Elgin
-// Last Updated: 04/23/20
+// Last Updated: 05/04/20
 // Game Engine for snake game
 
 // Source: http://gamecodeschool.com/android/building-a-simple-game-engine/
 // Source: https://github.com/ahmetcandiroglu/Super-Mario-Bros
 
 // TODO: IF YOU DIE ON MOUSE, SPAWNS MOUSE AT START OF NEXT GAME, NOT SUPPOSED TO HAPPEN, FIX
+// TODO: Make Mouse PNG move smoother
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +35,7 @@ public class GameEngine implements Runnable {
     private boolean moveLeft = false;
     private boolean moveUp = false;
     private boolean moveDown = false;
+    private int movementCount = 0;
 
 
     // Construct simple game engine
@@ -144,9 +146,35 @@ public class GameEngine implements Runnable {
             last = ButtonAction.DOWN;
         }
 
-        // If apple is a mouse, move mouse at half the speed of the snake
+        // If apple is a mouse, move mouse
         if (apple.getType().equals("mouse")) {
-            apple.move();
+            if (movementCount == 6) {
+                movementCount = 0;
+
+                // Save coordinates in case invalid move is made
+                float savedX = apple.getAppleCoords().getX();
+                float savedY = apple.getAppleCoords().getY();
+                apple.move();
+
+                // Check if the mouse moved into the snake
+                boolean validMouseMove = false;
+                while (!validMouseMove) {
+                    validMouseMove = true;
+                    for (Coordinates c : snake.getSnakeL()) {
+                        if (checkAppleCollision(c)) {
+                            validMouseMove = false;
+                        }
+                    }
+                    // If the mouse moves into the snake, make a different move
+                    if (!validMouseMove) {
+                        apple.setAppleCoords(savedX, savedY);
+                        apple.move();
+                    }
+                }
+            }
+            else {
+                movementCount += 1;
+            }
         }
     }
 
